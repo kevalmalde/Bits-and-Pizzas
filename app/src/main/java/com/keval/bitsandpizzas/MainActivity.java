@@ -85,10 +85,10 @@ public class MainActivity extends Activity {
                             currentPosition = 1;
                         }
                         if(fragment instanceof PastaFragment){
-                            currentPosition = 1;
+                            currentPosition = 2;
                         }
                         if(fragment instanceof StoresFragment){
-                            currentPosition = 1;
+                            currentPosition = 3;
                         }
                         setActionBarTitle(currentPosition);
                         drawerList.setItemChecked(currentPosition, true);
