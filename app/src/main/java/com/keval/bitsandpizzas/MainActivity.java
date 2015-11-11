@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,22 @@ public class MainActivity extends Activity {
     private String[] titles;
     private ListView drawerList;
     private ShareActionProvider shareActionProvider;
+    private DrawerLayout drawerLayout;
+
+    ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this,
+            drawerLayout, R.string.open_drawer, R.string.close_drawer){
+        @Override
+        public void onDrawerClosed(View drawerView) {
+            super.onDrawerClosed(drawerView);
+            invalidateOptionsMenu();
+        }
+
+        @Override
+        public void onDrawerOpened(View drawerView) {
+            super.onDrawerOpened(drawerView);
+            invalidateOptionsMenu();
+        }
+    };
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener{
         @Override
@@ -31,12 +48,19 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout.setDrawerListener(drawerToggle);
 
         titles = getResources().getStringArray(R.array.titles);
         drawerList = (ListView) findViewById(R.id.drawer);
         drawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1, titles));
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
-        setContentView(R.layout.activity_main);
+
+        if(savedInstanceState == null){
+            selectItem(0);
+        }
     }
 
     @Override
@@ -92,7 +116,6 @@ public class MainActivity extends Activity {
 
         setActionBarTitle(position);
 
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.closeDrawer(drawerList);
     }
 
@@ -104,5 +127,12 @@ public class MainActivity extends Activity {
             title = titles[position];
         }
         getActionBar().setTitle(title);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        boolean drawerOpen = drawerLayout.isDrawerOpen(drawerList);
+        menu.findItem(R.id.action_share).setVisible(!drawerOpen);
+        return super.onPrepareOptionsMenu(menu);
     }
 }
