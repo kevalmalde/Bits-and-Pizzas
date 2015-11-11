@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
     private ListView drawerList;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
+    private int currentPosition = 0;
 
 
     @Override
@@ -44,6 +45,9 @@ public class MainActivity extends Activity {
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         if(savedInstanceState != null) {
+            currentPosition = savedInstanceState.getInt("position");
+            setActionBarTitle(currentPosition);
+        }else{
             selectItem(0);
         }
 
@@ -108,6 +112,7 @@ public class MainActivity extends Activity {
     }
 
     private void selectItem(int position){
+        currentPosition = position;
         Fragment fragment;
         switch (position){
             case 1:
@@ -154,5 +159,11 @@ public class MainActivity extends Activity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("position", currentPosition);
     }
 }
