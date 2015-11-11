@@ -17,38 +17,38 @@ import android.widget.ListView;
 import android.widget.ShareActionProvider;
 
 public class MainActivity extends Activity {
-
-    private String[] titles;
-    private ListView drawerList;
-    private ShareActionProvider shareActionProvider;
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
-
-    private class DrawerItemClickListener implements ListView.OnItemClickListener{
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
         }
     };
 
+    private ShareActionProvider shareActionProvider;
+    private String[] titles;
+    private ListView drawerList;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         titles = getResources().getStringArray(R.array.titles);
-        drawerList = (ListView) findViewById(R.id.drawer);
-        drawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1, titles));
+        drawerList = (ListView)findViewById(R.id.drawer);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        drawerList.setAdapter(new ArrayAdapter<String>(this,
+                                                       android.R.layout.simple_list_item_activated_1, titles));
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        if(savedInstanceState == null){
+        if(savedInstanceState != null) {
             selectItem(0);
         }
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        drawerToggle = new ActionBarDrawerToggle(this,
-                drawerLayout, R.string.open_drawer, R.string.close_drawer){
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                                                 R.string.open_drawer, R.string.close_drawer){
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
@@ -79,24 +79,22 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem menuItem = menu.findItem(R.id.action_share);
         shareActionProvider = (ShareActionProvider) menuItem.getActionProvider();
-        setIntent("This is example Text");
+        setIntent("This is example text");
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void setIntent(String text){
+    private void setIntent(String text) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT,text);
+        intent.putExtra(Intent.EXTRA_TEXT, text);
         shareActionProvider.setShareIntent(intent);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        if( drawerToggle.onOptionsItemSelected(item) ){
+        if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
         switch (item.getItemId()){
             case R.id.action_create_order:
                 Intent intent = new Intent(this, OrderActivity.class);
