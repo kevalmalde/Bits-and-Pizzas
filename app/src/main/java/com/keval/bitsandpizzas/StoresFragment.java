@@ -11,8 +11,7 @@ import android.widget.ArrayAdapter;
 /**
  * A simple {@link ListFragment} subclass.
  */
-public class PastaFragment extends ListFragment {
-
+public class StoresFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -20,8 +19,10 @@ public class PastaFragment extends ListFragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 inflater.getContext(),
                 android.R.layout.simple_list_item_1,
-                getResources().getStringArray(R.array.pasta));
+                getResources().getStringArray(R.array.stores));
         setListAdapter(adapter);
-        return super.onCreateView(inflater,container, savedInstanceState);
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
+
+
 }
